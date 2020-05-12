@@ -43,7 +43,7 @@ tf.app.flags.DEFINE_integer(
 tf.app.flags.DEFINE_float(
     'conf_threshold', 0.5, 'Confidence threshold')
 tf.app.flags.DEFINE_float(
-    'iou_threshold', 0.4, 'IoU threshold')
+    'iou_threshold', 0.2, 'IoU threshold')
 
 tf.app.flags.DEFINE_float(
     'gpu_memory_fraction', 1.0, 'Gpu memory fraction to use')
@@ -96,8 +96,10 @@ def main(argv=None):
         
 
     print("Average score across all images: " + str(np.mean(scores)))
+    print("Max score across all images: " + str(np.max(scores)))
     print("Average inference time: " + str(np.mean(inference_time)) + "ms")
     print("Average score disregarding mis-predictions: " + str(np.mean(scores_wout_mispredictions)))
+    print("Minimum score disregarding mis-predictions: " + str(np.min(scores_wout_mispredictions)))
 
               
 def get_score_from_image(img_fp, gpu_options, config, model):

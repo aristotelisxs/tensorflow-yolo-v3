@@ -31,6 +31,8 @@ tf.app.flags.DEFINE_string(
     'frozen_model', '', 'Frozen tensorflow protobuf model')
 tf.app.flags.DEFINE_bool(
     'tiny', False, 'Use tiny version of YOLOv3')
+tf.app.flags.DEFINE_bool(
+    'spp', False, 'Use SPP version of YOLOv3')
 
 tf.app.flags.DEFINE_integer(
     'size', 416, 'Image size')
@@ -113,6 +115,13 @@ def get_score_from_image(img_fp, gpu_options, config, model):
                 boxes, feed_dict={inputs: [img_resized]})
 
     else:
+        if FLAGS.tiny:
+            model = yolo_v3_tiny.yolo_v3_tiny
+        elif FLAGS.spp:
+            model = yolo_v3.yolo_v3_spp
+        else:
+            model = yolo_v3.yolo_v3
+
         boxes, inputs = get_boxes_and_inputs(model, len(classes), FLAGS.size, FLAGS.data_format)
 
         saver = tf.train.Saver(var_list=tf.global_variables(scope='detector'))

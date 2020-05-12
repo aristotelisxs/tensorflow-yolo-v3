@@ -239,6 +239,24 @@ def draw_boxes(boxes, img, cls_names, detection_size, is_letter_box_image):
             draw.rectangle(box, outline=color)
             draw.text(box[:2], '{} {:.2f}%'.format(
                 cls_names[cls], score * 100), fill=color)
+                
+                
+def get_person_scores(boxes, cls_names):
+
+    values_view = boxes.items()
+    value_iterator = iter(values_view)
+    
+    try:
+        cls, bboxs = next(value_iterator)
+    except:
+        return 0
+
+    if cls_names[cls].startswith("person"):
+        score = bboxs[0][1] * 100
+    else:
+        score = 0
+
+    return score
 
 
 def convert_to_original_size(box, size, original_size, is_letter_box_image):
